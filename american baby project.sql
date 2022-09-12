@@ -5,24 +5,24 @@ select * from baby_names;
 
 
 /*Select first names and the total babies with that first_name
--- Group by first_name and filter for those names that appear in all 101 years
--- Order by the total number of babies with that first_name, descending*/
+Group by first_name and filter for those names that appear in all 37 years
+Order by the total number of babies with that first_name, descending*/
 SELECT name, sum(Count)
 from baby_names
 group by name
-having count(year) = 70
+having count(year) = 37
 order by sum(count) desc;
 
-/*-- Classify names as 'Classic', 'Semi-classic', 'Semi-trendy', or 'Trendy'
--- Alias this column as popularity_type
--- Select name, the sum of babies who have ever had that name, and popularity_type
--- Order the results alphabetically by name*/
+/*Classify names as 'Classic', 'Semi-classic', 'Semi-trendy', or 'Trendy'
+Alias this column as popularity_type
+Select name, the sum of babies who have ever had that name, and popularity_type
+Order the results alphabetically by name*/
 
 select name,year,sum(count),count(year),
 	case
-		when count(year)>60 then 'Classic'
-        when count(year)>50 then 'semi-classic'
-        when count(year)>20 then 'Semi trendy'
+		when count(year)>30 then 'Classic'
+        when count(year)>15 then 'semi-classic'
+        when count(year)>5 then 'Semi trendy'
         else 'trendy'
         end as popularity_type
 from baby_names
@@ -30,10 +30,10 @@ group by name
 order by count(year);
     
     
-    /*-- RANK names by the sum of babies who have ever had that name (descending), aliasing as name_rank
--- Select name_rank, first_name, and the sum of babies who have ever had that name
--- Filter the data for results where sex equals 'F'
--- Limit to ten results*/
+    /*RANK names by the sum of babies who have ever had that name (descending), aliasing as name_rank
+Select name_rank, first_name, and the sum of babies who have ever had that name
+Filter the data for results where sex equals 'F'
+Limit to ten results*/
 
 select rank() over(order by sum(count) desc)as name_rank, name, sum(count) from baby_names where Gender ='F'
 group by name
@@ -58,8 +58,8 @@ select year,name,sum(count) over(order by year)  as cumulative_anna from baby_na
 select year,max(count) as max_number from baby_names where gender='M' group by year;
 
 /* Select year, name given to the largest number of male babies, and num of babies given that name
--- Join baby_names to the code in the last task as a subquery
--- Order results by year descending*/
+Join baby_names to the code in the last task as a subquery
+Order results by year descending*/
 
 select b.year,b.name,b.count from baby_names as b
 inner join
